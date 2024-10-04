@@ -14,7 +14,7 @@ type CreateFormModalProps = {
   open: boolean;
   loading: boolean;
   onClose: () => void;
-  onSubmit: (data: z.infer<typeof formSchema>) => void;
+  onSubmit: (data: CreateFormProps) => void;
 };
 
 const formSchema = z.object({
