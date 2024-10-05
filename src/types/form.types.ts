@@ -1,22 +1,21 @@
-export type FieldType = 'email' | 'text';
+export type InputType = 'email' | 'text';
 
-type BaseField = {
-  id: string;
-  title: string;
-  type: FieldType;
-  description?: string;
-  isRequired: boolean;
-};
+// type BaseField = {
+//   id: string;
+//   title: string;
+//   type: FieldType;
+//   description?: string;
+// };
 
-export type EmailField = BaseField & {
-  type: 'email';
-};
+// export type EmailField = BaseField & {
+//   type: 'email';
+// };
 
-export type TextField = BaseField & {
-  type: 'text';
-};
+// export type TextField = BaseField & {
+//   type: 'text';
+// };
 
-export type FormField = EmailField | TextField;
+// export type FormField = EmailField | TextField;
 
 export type StepType = 'welcome' | 'question' | 'end';
 
@@ -25,7 +24,6 @@ export type BaseStep = {
   title: string;
   type: StepType;
   description?: string;
-  fields: FormField[];
 };
 
 export type ImagePlacement = 'left' | 'right';
@@ -43,6 +41,8 @@ export type WelcomeStep = BaseStep & {
 
 export type QuestionStep = BaseStep & {
   type: 'question';
+  inputType: InputType;
+  isRequired: boolean;
 };
 
 export type EndStep = BaseStep & {

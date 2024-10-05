@@ -45,7 +45,6 @@ function FormBuilder() {
           <TabsContent value="content" className="h-full">
             <FormContent />
           </TabsContent>
-          <TabsContent value="design">Change your password here.</TabsContent>
         </Tabs>
       </section>
 

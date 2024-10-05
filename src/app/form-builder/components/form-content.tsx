@@ -6,16 +6,43 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import AddFieldModal, { Field } from './add-field-modal';
+import StepConfig from './step-config';
 
 import { Menu, Dot, GripVertical, Plus, Cloud, Trash2, X } from 'lucide-react';
 
+import useFormEditorStore from '../hooks/use-form-editor-store';
+
+import { Step } from '@/types/form.types';
+
 function FormContent() {
   const [openAddFieldModal, setOpenAddFieldModal] = useState(false);
+  const [openStepConfigDrawer, setOpenStepConfigDrawer] = useState(false);
+
+  // Form state management
+  const form = useFormEditorStore((state) => state.form);
+  const addStep = useFormEditorStore((state) => state.addStep);
+  const removeStep = useFormEditorStore((state) => state.removeStep);
+  const setActiveStep = useFormEditorStore((state) => state.setActiveStep);
 
   const handleAddField = (selectedField: Field) => {
-    console.log('selected field', selectedField);
+    // Essentially, what happens here is that adding a new step of type question.
+    addStep(selectedField.type);
+    setOpenStepConfigDrawer(true);
     setOpenAddFieldModal(false);
   };
+
+  const handleTabClick = (step: Step) => {
+    // Set the active step to the selected step. This will be used to display the step configuration drawer.
+    setActiveStep(step);
+    setOpenStepConfigDrawer(true);
+  };
+
+  const handleTabDelete = (stepId: string) => {
+    // Remove the step from the form state.
+    removeStep(stepId);
+  };
+
+  console.log('form', form);
 
   return (
     <div className="flex flex-col justify-between ">
@@ -27,9 +54,21 @@ function FormContent() {
           <p className="mt-1 text-xs text-gray-500">The steps users will take to complete the form</p>
         </div>
 
-        <div className="mt-4">
-          <Tab type="welcome-screen" label="Welcome screen" onClick={() => {}} />
-          <Tab type="question" label="Welcome screen" onClick={() => {}} />
+        <div className="mt-4 space-y-2">
+          <Tab
+            type="welcome"
+            label="Welcome screen"
+            onClick={() => {
+              const welcomeStep = form.steps.find((step) => step.type === 'welcome');
+              if (welcomeStep) handleTabClick(welcomeStep);
+            }}
+          />
+
+          {form.steps
+            .filter((step) => step.type === 'question')
+            .map((step) => (
+              <Tab key={step.id} type="question" label={step.title || 'Untitled question'} onClick={() => handleTabClick(step)} onDelete={() => handleTabDelete(step.id)} />
+            ))}
         </div>
 
         <Button variant="outline" size="sm" className="mt-6" onClick={() => setOpenAddFieldModal(true)}>
@@ -38,9 +77,18 @@ function FormContent() {
 
         <AddFieldModal open={openAddFieldModal} loading={false} onSubmit={handleAddField} onClose={() => setOpenAddFieldModal(false)} />
 
+        <StepConfig open={openStepConfigDrawer} onSubmit={() => {}} onClose={() => setOpenStepConfigDrawer(false)} />
+
         <Separator className="my-10" />
 
-        <Tab type="end-screen" label="End screen" onClick={() => {}} />
+        <Tab
+          type="end"
+          label="End screen"
+          onClick={() => {
+            const endStep = form.steps.find((step) => step.type === 'end');
+            if (endStep) handleTabClick(endStep);
+          }}
+        />
 
         <div className="mt-8 flex flex-row items-center gap-2">
           <Button className="flex-1">
@@ -60,7 +108,7 @@ function FormContent() {
 export default FormContent;
 
 type TabProps = {
-  type: 'welcome-screen' | 'question' | 'end-screen';
+  type: 'welcome' | 'question' | 'end';
   label: string;
   onClick: () => void;
   onDelete?: () => void;
@@ -68,8 +116,8 @@ type TabProps = {
 
 function Tab({ type, label, onClick, onDelete }: TabProps) {
   return (
-    <div onClick={onClick} className="flex flex-row items-center justify-between bg-gray-50 hover:bg-gray-100 py-2 px-2 rounded-lg cursor-pointer">
-      <div className="flex flex-row items-center gap-2 ">
+    <div className="flex flex-row items-center justify-between bg-gray-50 hover:bg-gray-100  px-2 rounded-lg cursor-pointer">
+      <div onClick={onClick} className="flex flex-1 py-1 flex-row items-center gap-2 ">
         {type === 'question' ? <GripVertical className="w-3 h-3 text-gray-500 cursor-grab" /> : <Dot className="w-6 h-6 text-gray-500" />}
         <p className="text-xs font-medium">{label}</p>
       </div>

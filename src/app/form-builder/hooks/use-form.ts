@@ -1,22 +1,37 @@
+// Hooks
+import useFormEditor from './use-form-editor';
 import useFormEditorStore from './use-form-editor-store';
 
-import { FieldType } from '@/types/form.types';
+import { EndStep, InputType, QuestionStep, WelcomeStep } from '@/types/form.types';
 
-function UseForm() {
+function useForm() {
+  const { setActiveStep } = useFormEditor();
   const form = useFormEditorStore((state) => state.form);
-  const setForm = useFormEditorStore((state) => state.setForm);
+  // const setForm = useFormEditorStore((state) => state.setForm);
+  // const addStep = useFormEditorStore((state) => state.addStep);
 
-  const addField = (field: FieldType) => {
-    console.log('field', field);
+  const addStep = (inputType: InputType) => {
+    console.log('field', inputType);
+    // Add the new step to the form
   };
 
-  const removeField = (fieldId: string) => {
-    console.log('fieldId', fieldId);
+  const removeStep = (stepId: string) => {
+    console.log('fieldId', stepId);
   };
 
-  const changeConfig = (config: any) => {};
+  const editWelcomeStep = (step: Omit<WelcomeStep, 'type'>) => {
+    //
+  };
 
-  return { form, addField, removeField, changeConfig };
+  const editStep = (stepId: string, step: Omit<QuestionStep, 'type'>) => {
+    console.log('stepId', stepId, 'config', step);
+  };
+
+  const editEndStep = (step: Omit<EndStep, 'type'>) => {};
+
+  const editConfig = (step: any) => {};
+
+  return { form, addStep, removeStep, editConfig };
 }
 
-export default UseForm;
+export default useForm;

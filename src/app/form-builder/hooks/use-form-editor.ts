@@ -1,6 +1,6 @@
 import useFormEditorStore from './use-form-editor-store';
 
-function UseFormEditor() {
+function useFormEditor() {
   const form = useFormEditorStore((state) => state.form);
   const activeStep = useFormEditorStore((state) => state.activeStep);
   const _setActiveStep = useFormEditorStore((state) => state.setActiveStep);
@@ -15,4 +15,4 @@ function UseFormEditor() {
   return { activeStep, setActiveStep };
 }
 
-export default UseFormEditor;
+export default useFormEditor;
