@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 
-import { FieldType } from '@/types/form.types';
+import { InputType } from '@/types/form.types';
 
 type AddFieldModalProps = {
   open: boolean;
@@ -11,7 +11,7 @@ type AddFieldModalProps = {
 };
 
 export type Field = {
-  type: FieldType;
+  type: InputType;
   label: string;
 };
 

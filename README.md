@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div style="display: flex; flex-direction: row">
+   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="Typescript" />
+  <img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next Js" />
+  </div>
+
+## Overview
+
+enables users to create interactive forms, surveys, or questionnaires with a focus on a user-friendly interface, allowing for streamlined data collection. The platform likely emphasizes engaging form designs, easy customization, and efficient data analysis, catering to both personal and business use cases.
+
+## Features
+
+- Create interactive forms
+- Publish forms
+
+## Demo
+
+[Visit](https://hyperforms.vercel.app).
 
 ## Getting Started
 
-First, run the development server:
+First, install the dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then, run the development server.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Visit [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
+#### Home Page
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<img src="https://res.cloudinary.com/drifly/image/upload/v1654195094/GitHub/ResultPlatform/Home_ern2hm.png" width="500px" alt="Home Page"/>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Individual Examinee Result Page
 
-## Deploy on Vercel
+<img src="https://res.cloudinary.com/drifly/image/upload/v1654195099/GitHub/ResultPlatform/Examinee_Result_ueu1dv.png" width="500px" alt="Individual Examinee Result Page"/>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Leaderboard Page
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<img src="https://res.cloudinary.com/drifly/image/upload/v1654195096/GitHub/ResultPlatform/Leaderboard_wzaapd.png" width="500px" alt="Leaderboard Page"/>
+
+#### Resource Page
+
+<img src="https://res.cloudinary.com/drifly/image/upload/v1654195098/GitHub/ResultPlatform/Resources_klvyjm.png" width="500px" alt="Resource Page"/>
+
+## Contributing
+
+Forks are lovely. Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
