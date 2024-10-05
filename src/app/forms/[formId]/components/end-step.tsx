@@ -20,7 +20,7 @@ function EndStep() {
     <div className={`relative flex flex-col lg:flex-row items-center justify-center gap-20 bg-slate-100 h-screen rounded-2xl p-4`}>
       <div className="flex-col items-center justify-center">
         <h1 className="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">{step?.title}</h1>
-        <p className="leading-7 text-lg">{step?.description}</p>
+        <p className="mt-4 leading-7 text-lg">{step?.description}</p>
         <Button className="mt-4 rounded-full" onClick={handleSubmit}>
           Submit
         </Button>
