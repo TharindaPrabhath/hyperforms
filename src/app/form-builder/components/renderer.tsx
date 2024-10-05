@@ -3,7 +3,7 @@ import WelcomeRenderer from './welcome-renderer';
 import QuestionRenderer from './question-renderer';
 import EndRenderer from './end-renderer';
 
-import useFormEditorStore from '../hooks/use-form-editor-store';
+import useFormEditorStore from '@/hooks/use-form-editor-store';
 
 function Renderer() {
   const activeStep = useFormEditorStore((state) => state.form.activeStep);

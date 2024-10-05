@@ -11,10 +11,12 @@ type FormEditorState = {
   addStep: (inputType: InputType) => void;
   editStep: (stepId: string, data: Editable) => void;
   removeStep: (stepId: string) => void;
+  reset: () => void;
 };
 
 const WelcomeStepState: WelcomeStep = {
   id: generateId(),
+  index: 0,
   title: 'Welcome to HyperForm',
   description: 'A form builder for everyone.',
   type: 'welcome',
@@ -29,6 +31,7 @@ const WelcomeStepState: WelcomeStep = {
 
 const EndStepState: EndStep = {
   id: generateId(),
+  index: 1,
   title: 'Thank you',
   description: 'This is a description of the form end',
   type: 'end'
@@ -51,13 +54,22 @@ const useFormEditorStore = create<FormEditorState>()(
         set((state) => {
           const newStep: Step = {
             id: generateId(),
+            index: state.form.steps.length - 1,
             title: 'New Step',
             type: 'question',
             inputType,
             isRequired: false
           };
 
-          return { activeStep: newStep, form: { ...state.form, steps: [...state.form.steps, newStep] } };
+          // Move the end step to the end of the steps array
+          const endStep = state.form.steps.find((step) => step.type === 'end') as EndStep;
+          const updatedSteps = state.form.steps.filter((step) => step.type !== 'end');
+          endStep.index++;
+          // @ts-ignore
+          updatedSteps.push(newStep, endStep);
+
+          // return { activeStep: newStep, form: { ...state.form, steps: [...state.form.steps, newStep] } };
+          return { form: { ...state.form, activeStep: newStep, steps: updatedSteps } };
         });
       },
       editStep: (stepId: string, data: Editable) => {
@@ -75,7 +87,8 @@ const useFormEditorStore = create<FormEditorState>()(
 
           return { form: { ...state.form, activeStep: welcomeStep!, steps: updatedSteps } };
         });
-      }
+      },
+      reset: () => set({ form: InitFormState })
     }),
     { name: 'formEditorStore' }
   )

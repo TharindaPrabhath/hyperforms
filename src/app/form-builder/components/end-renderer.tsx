@@ -1,7 +1,7 @@
 import Watermark from '@/components/watermark';
 import { RendererInput } from '@/components/ui/renderer-input';
 
-import useFormEditorStore from '../hooks/use-form-editor-store';
+import useFormEditorStore from '@/hooks/use-form-editor-store';
 
 import { Editable, EndStep } from '@/types/form.types';
 

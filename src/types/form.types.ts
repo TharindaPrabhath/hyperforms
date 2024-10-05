@@ -1,26 +1,10 @@
 export type InputType = 'email' | 'text';
 
-// type BaseField = {
-//   id: string;
-//   title: string;
-//   type: FieldType;
-//   description?: string;
-// };
-
-// export type EmailField = BaseField & {
-//   type: 'email';
-// };
-
-// export type TextField = BaseField & {
-//   type: 'text';
-// };
-
-// export type FormField = EmailField | TextField;
-
 export type StepType = 'welcome' | 'question' | 'end';
 
 export type BaseStep = {
   id: string;
+  index: number;
   title: string;
   type: StepType;
   description?: string;

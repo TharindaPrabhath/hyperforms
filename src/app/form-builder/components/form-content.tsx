@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 // Components
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -10,11 +12,13 @@ import StepConfig from './step-config';
 
 import { Menu, Dot, GripVertical, Plus, Cloud, Trash2, X } from 'lucide-react';
 
-import useFormEditorStore from '../hooks/use-form-editor-store';
+import useFormEditorStore from '@/hooks/use-form-editor-store';
 
 import { Step } from '@/types/form.types';
 
 function FormContent() {
+  const router = useRouter();
+
   const [openAddFieldModal, setOpenAddFieldModal] = useState(false);
   const [openStepConfigDrawer, setOpenStepConfigDrawer] = useState(false);
 
@@ -23,11 +27,11 @@ function FormContent() {
   const addStep = useFormEditorStore((state) => state.addStep);
   const removeStep = useFormEditorStore((state) => state.removeStep);
   const setActiveStep = useFormEditorStore((state) => state.setActiveStep);
+  const reset = useFormEditorStore((state) => state.reset);
 
   const handleAddField = (selectedField: Field) => {
     // Essentially, what happens here is that adding a new step of type question.
     addStep(selectedField.type);
-    setActiveStep(form.steps[form.steps.length - 1]);
     setOpenStepConfigDrawer(true);
     setOpenAddFieldModal(false);
   };
@@ -41,6 +45,16 @@ function FormContent() {
   const handleTabDelete = (stepId: string) => {
     // Remove the step from the form state.
     removeStep(stepId);
+  };
+
+  const handleDeleteForm = () => {
+    // Reset the form state to the initial state.
+    // This will remove all the steps and reset the active step to the welcome step.
+    reset();
+  };
+
+  const handlePublishForm = () => {
+    router.push(`/forms/${form.id}`);
   };
 
   return (
@@ -90,11 +104,11 @@ function FormContent() {
         />
 
         <div className="mt-8 flex flex-row items-center gap-2">
-          <Button className="flex-1">
+          <Button className="flex-1" onClick={handlePublishForm}>
             <Cloud className="w-4 h-4  mr-2 inline" />
             Save & Publish
           </Button>
-          <Button className="flex-1 text-destructive hover:text-destructive hover:bg-red-100" variant="ghost">
+          <Button className="flex-1 text-destructive hover:text-destructive hover:bg-red-100" variant="ghost" onClick={handleDeleteForm}>
             <Trash2 className="w-4 h-4  mr-2 inline" />
             Delete
           </Button>

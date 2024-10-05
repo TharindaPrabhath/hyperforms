@@ -18,7 +18,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Settings, Upload, AlignLeft, AlignRight } from 'lucide-react';
 
 // Hooks
-import useFormEditorStore from '../hooks/use-form-editor-store';
+import useFormEditorStore from '@/hooks/use-form-editor-store';
 
 import { Editable, WelcomeStep } from '@/types/form.types';
 

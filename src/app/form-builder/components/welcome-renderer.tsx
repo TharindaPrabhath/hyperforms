@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { RendererInput } from '@/components/ui/renderer-input';
 
-import useFormEditorStore from '../hooks/use-form-editor-store';
+import useFormEditorStore from '@/hooks/use-form-editor-store';
 
 import { Editable, WelcomeStep } from '@/types/form.types';
 

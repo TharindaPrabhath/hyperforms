@@ -18,7 +18,7 @@ import EndStepConfig from './end-step-config';
 import { Settings } from 'lucide-react';
 
 // Hooks
-import useFormEditorStore from '../hooks/use-form-editor-store';
+import useFormEditorStore from '@/hooks/use-form-editor-store';
 
 import { Editable, InputType, QuestionStep } from '@/types/form.types';
 

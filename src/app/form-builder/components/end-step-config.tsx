@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Settings } from 'lucide-react';
 
 // Hooks
-import useFormEditorStore from '../hooks/use-form-editor-store';
+import useFormEditorStore from '@/hooks/use-form-editor-store';
 
 import { Editable, EndStep } from '@/types/form.types';
 
