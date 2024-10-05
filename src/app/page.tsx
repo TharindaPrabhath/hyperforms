@@ -3,16 +3,25 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 // Components
 import { Button } from '@/components/ui/button';
 import CreateFormModal, { CreateFormProps } from '@/components/create-form-modal';
 
+import useFormEditorStore from '@/hooks/use-form-editor-store';
+
 export default function Home() {
+  const router = useRouter();
+
   const [openCreateFormModal, setOpenCreateFormModal] = useState(false);
 
+  const changeFormName = useFormEditorStore((state) => state.changeFormName);
+
   const handleCreateForm = (props: CreateFormProps) => {
-    console.log('Create form', props);
+    changeFormName(props.name);
+    setOpenCreateFormModal(false);
+    router.push('/form-builder');
   };
 
   return (
