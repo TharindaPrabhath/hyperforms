@@ -2,7 +2,7 @@ import useFormEditorStore from './use-form-editor-store';
 
 function useFormEditor() {
   const form = useFormEditorStore((state) => state.form);
-  const activeStep = useFormEditorStore((state) => state.activeStep);
+  const activeStep = useFormEditorStore((state) => state.form.activeStep);
   const _setActiveStep = useFormEditorStore((state) => state.setActiveStep);
 
   const setActiveStep = (stepId: string) => {

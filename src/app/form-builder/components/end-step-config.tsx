@@ -17,7 +17,7 @@ import { Settings } from 'lucide-react';
 // Hooks
 import useFormEditorStore from '../hooks/use-form-editor-store';
 
-import { EndStep } from '@/types/form.types';
+import { Editable, EndStep } from '@/types/form.types';
 
 type SheetProps = {
   open: boolean;
@@ -34,14 +34,20 @@ type EditStepProps = z.infer<typeof formSchema>;
 
 function EndStepConfig({ open, onSubmit, onClose }: SheetProps) {
   const [loading, setLoading] = useState(false);
-  const activeStep = useFormEditorStore((state) => state.activeStep) as EndStep;
-  const hyperform = useFormEditorStore((state) => state.form);
+  const activeStep = useFormEditorStore((state) => state.form.activeStep) as EndStep;
+  const _form = useFormEditorStore((state) => state.form);
+  const step = _form.steps.find((step) => step.id === activeStep.id) as EndStep;
+  const editStep = useFormEditorStore((state) => state.editStep);
 
   const form = useReactForm<EditStepProps>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
       description: ''
+    },
+    values: {
+      title: step.title,
+      description: step.description
     }
   });
 
@@ -49,9 +55,19 @@ function EndStepConfig({ open, onSubmit, onClose }: SheetProps) {
     !open && onClose();
   };
 
+  const handleOnChange = (editable: Editable) => {
+    editStep(activeStep.id, editable);
+  };
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="w-80 border-none outline-none shadow-none">
+      <SheetContent
+        side="left" // Prevents the sheet from closing when clicking outside
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+        className="w-80 border-none outline-none shadow-none"
+      >
         <SheetHeader>
           <div>
             <div className="flex flex-row items-center gap-2">
@@ -70,7 +86,14 @@ function EndStepConfig({ open, onSubmit, onClose }: SheetProps) {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Title" {...field} />
+                    <Input
+                      placeholder="Title"
+                      {...field}
+                      onChange={(e) => {
+                        handleOnChange({ title: e.target.value });
+                        field.onChange(e);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -84,7 +107,14 @@ function EndStepConfig({ open, onSubmit, onClose }: SheetProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="Description" {...field} />
+                    <Input
+                      placeholder="Description"
+                      {...field}
+                      onChange={(e) => {
+                        handleOnChange({ description: e.target.value });
+                        field.onChange(e);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

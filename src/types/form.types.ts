@@ -33,7 +33,7 @@ export type WelcomeStep = BaseStep & {
   button: {
     text: string;
   };
-  image: {
+  image?: {
     url: string;
     placement: ImagePlacement;
   };
@@ -54,6 +54,20 @@ export type Step = WelcomeStep | QuestionStep | EndStep;
 export type Form = {
   id: string;
   name: string;
+  activeStep: Step;
   steps: Step[];
   config: any;
+};
+
+export type Editable = {
+  title?: string;
+  description?: string;
+  isRequired?: boolean;
+  button?: {
+    text: string;
+  };
+  image?: {
+    url: string;
+    placement: ImagePlacement;
+  };
 };

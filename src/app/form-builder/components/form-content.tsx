@@ -42,8 +42,6 @@ function FormContent() {
     removeStep(stepId);
   };
 
-  console.log('form', form);
-
   return (
     <div className="flex flex-col justify-between ">
       <div className="flex-1">

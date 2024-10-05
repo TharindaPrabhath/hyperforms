@@ -20,7 +20,7 @@ import { Settings, Upload, AlignLeft, AlignRight } from 'lucide-react';
 // Hooks
 import useFormEditorStore from '../hooks/use-form-editor-store';
 
-import { WelcomeStep } from '@/types/form.types';
+import { Editable, WelcomeStep } from '@/types/form.types';
 
 type SheetProps = {
   open: boolean;
@@ -44,14 +44,25 @@ type EditStepProps = z.infer<typeof formSchema>;
 
 function WelcomeStepConfig({ open, onSubmit, onClose }: SheetProps) {
   const [loading, setLoading] = useState(false);
-  const activeStep = useFormEditorStore((state) => state.activeStep) as WelcomeStep;
-  const hyperform = useFormEditorStore((state) => state.form);
+  const activeStep = useFormEditorStore((state) => state.form.activeStep) as WelcomeStep;
+  const _form = useFormEditorStore((state) => state.form);
+  const step = _form.steps.find((step) => step.id === activeStep.id) as WelcomeStep;
+  const editStep = useFormEditorStore((state) => state.editStep);
 
   const form = useReactForm<EditStepProps>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
       description: ''
+    },
+    values: {
+      title: step.title,
+      description: step.description,
+      buttonText: step.button.text,
+      image: {
+        url: step.image?.url,
+        placement: step.image?.placement
+      }
     }
   });
 
@@ -59,9 +70,19 @@ function WelcomeStepConfig({ open, onSubmit, onClose }: SheetProps) {
     !open && onClose();
   };
 
+  const handleOnChange = (editable: Editable) => {
+    editStep(activeStep.id, editable);
+  };
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="w-80 border-none outline-none shadow-none">
+      <SheetContent
+        side="left" // Prevents the sheet from closing when clicking outside
+        // onInteractOutside={(e) => {
+        //   e.preventDefault();
+        // }}
+        className="w-80 border-none outline-none shadow-none"
+      >
         <SheetHeader>
           <div>
             <div className="flex flex-row items-center gap-2">
@@ -80,7 +101,14 @@ function WelcomeStepConfig({ open, onSubmit, onClose }: SheetProps) {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Title" {...field} />
+                    <Input
+                      placeholder="Title"
+                      {...field}
+                      onChange={(e) => {
+                        handleOnChange({ title: e.target.value });
+                        field.onChange(e);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -94,7 +122,14 @@ function WelcomeStepConfig({ open, onSubmit, onClose }: SheetProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="Description" {...field} />
+                    <Input
+                      placeholder="Description"
+                      {...field}
+                      onChange={(e) => {
+                        handleOnChange({ description: e.target.value });
+                        field.onChange(e);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -108,7 +143,14 @@ function WelcomeStepConfig({ open, onSubmit, onClose }: SheetProps) {
                 <FormItem>
                   <FormLabel>Button Text</FormLabel>
                   <FormControl>
-                    <Input placeholder="Let's start" {...field} />
+                    <Input
+                      placeholder="Let's start"
+                      {...field}
+                      onChange={(e) => {
+                        editStep(activeStep.id, { button: { text: e.target.value } });
+                        field.onChange(e);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -120,7 +162,7 @@ function WelcomeStepConfig({ open, onSubmit, onClose }: SheetProps) {
             </Button>
 
             <div className="space-y-2">
-              <Image src={activeStep.image.url} alt="Uploaded image" width={500} height={500} />
+              <Image src={activeStep.image?.url!} alt="Uploaded image" width={500} height={500} />
               <div className="flex flex-row items-center justify-between">
                 <Button size="sm" variant="outline" className="">
                   Remove Image

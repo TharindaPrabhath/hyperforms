@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import FormSettings from './components/form-settings';
 import FormContent from './components/form-content';
+import Renderer from './components/renderer';
 
 import { Box, Settings } from 'lucide-react';
 
@@ -14,7 +15,7 @@ function FormBuilder() {
   const [openSettings, setOpenSettings] = useState(false);
 
   return (
-    <div className="bg-white p-2 flex flex-row h-screen">
+    <div className="bg-white p-2 flex flex-row h-screen overflow-y-hidden">
       <section className="w-80 py-3 px-3 flex flex-col">
         <div className="flex flex-row items-center justify-between">
           <Breadcrumb>
@@ -48,7 +49,9 @@ function FormBuilder() {
         </Tabs>
       </section>
 
-      <section className="flex-1 bg-black rounded-2xl"></section>
+      <section className="flex-1">
+        <Renderer />
+      </section>
     </div>
   );
 }

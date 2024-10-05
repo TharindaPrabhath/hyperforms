@@ -20,7 +20,7 @@ import { Settings } from 'lucide-react';
 // Hooks
 import useFormEditorStore from '../hooks/use-form-editor-store';
 
-import { InputType } from '@/types/form.types';
+import { Editable, InputType, QuestionStep } from '@/types/form.types';
 
 type SheetProps = {
   open: boolean;
@@ -38,14 +38,21 @@ type EditStepProps = z.infer<typeof formSchema>;
 
 function StepConfig({ open, onSubmit, onClose }: SheetProps) {
   const [loading, setLoading] = useState(false);
-  const activeStep = useFormEditorStore((state) => state.activeStep);
-  const hyperform = useFormEditorStore((state) => state.form);
+  const activeStep = useFormEditorStore((state) => state.form.activeStep);
+  const _form = useFormEditorStore((state) => state.form);
+  const step = _form.steps.find((step) => step.id === activeStep.id) as QuestionStep;
+  const editStep = useFormEditorStore((state) => state.editStep);
 
   const form = useReactForm<EditStepProps>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
       description: ''
+    },
+    values: {
+      title: step.title,
+      description: step.description,
+      isRequired: step.isRequired
     }
   });
 
@@ -64,13 +71,24 @@ function StepConfig({ open, onSubmit, onClose }: SheetProps) {
     }
   };
 
+  const handleOnChange = (editable: Editable) => {
+    editStep(activeStep.id, editable);
+  };
+
   if (activeStep?.type === 'welcome') return <WelcomeStepConfig open={open} onSubmit={() => {}} onClose={onClose} />;
 
   if (activeStep?.type === 'end') return <EndStepConfig open={open} onSubmit={() => {}} onClose={onClose} />;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="w-80 border-none outline-none shadow-none">
+      <SheetContent
+        side="left"
+        // Prevents the sheet from closing when clicking outside
+        // onInteractOutside={(e) => {
+        //   e.preventDefault();
+        // }}
+        className="w-80 border-none outline-none shadow-none"
+      >
         <SheetHeader>
           <div>
             <div className="flex flex-row items-center gap-2">
@@ -89,7 +107,14 @@ function StepConfig({ open, onSubmit, onClose }: SheetProps) {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Title" {...field} />
+                    <Input
+                      placeholder="Title"
+                      {...field}
+                      onChange={(e) => {
+                        handleOnChange({ title: e.target.value });
+                        field.onChange(e);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,7 +128,14 @@ function StepConfig({ open, onSubmit, onClose }: SheetProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="Description" {...field} />
+                    <Input
+                      placeholder="Description"
+                      {...field}
+                      onChange={(e) => {
+                        handleOnChange({ description: e.target.value });
+                        field.onChange(e);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -117,7 +149,13 @@ function StepConfig({ open, onSubmit, onClose }: SheetProps) {
                 <FormItem className="flex flex-row items-center justify-between">
                   <FormLabel>Required</FormLabel>
                   <FormControl>
-                    <Switch {...field} />
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={(checked) => {
+                        handleOnChange({ isRequired: checked });
+                        field.onChange(checked);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -1,53 +1,52 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { Form, InputType, Step } from '@/types/form.types';
+import { Editable, EndStep, Form, InputType, Step, WelcomeStep } from '@/types/form.types';
 
 import { generateId } from '@/lib/utils';
 
 type FormEditorState = {
-  activeStep: Step | null;
   setActiveStep: (step: Step) => void;
   form: Form;
-  // setForm: (form: Form) => void;
   addStep: (inputType: InputType) => void;
+  editStep: (stepId: string, data: Editable) => void;
   removeStep: (stepId: string) => void;
+};
+
+const WelcomeStepState: WelcomeStep = {
+  id: generateId(),
+  title: 'Welcome to HyperForm',
+  description: 'A form builder for everyone.',
+  type: 'welcome',
+  button: {
+    text: `Let's start`
+  },
+  image: {
+    url: '/logo.png',
+    placement: 'left'
+  }
+};
+
+const EndStepState: EndStep = {
+  id: generateId(),
+  title: 'Thank you',
+  description: 'This is a description of the form end',
+  type: 'end'
 };
 
 const InitFormState: Form = {
   id: generateId(),
   name: 'New Form',
-  steps: [
-    {
-      id: generateId(),
-      title: 'Welcome to HyperForm',
-      description: 'A form builder for everyone.',
-      type: 'welcome',
-      button: {
-        text: `Let's start`
-      },
-      image: {
-        url: '/logo.png',
-        placement: 'left'
-      }
-    },
-    {
-      id: generateId(),
-      title: 'Thank you',
-      description: 'This is a description of the form end',
-      type: 'end'
-    }
-  ],
+  steps: [WelcomeStepState, EndStepState],
+  activeStep: WelcomeStepState,
   config: {}
 };
 
 const useFormEditorStore = create<FormEditorState>()(
   persist(
     (set) => ({
-      activeStep: null,
-      setActiveStep: (step: Step) => set({ activeStep: step }),
+      setActiveStep: (step: Step) => set((state) => ({ form: { ...state.form, activeStep: step } })),
       form: InitFormState,
-      // setForm: (form: Form) => set({ form }),
       addStep: (inputType: InputType) => {
         set((state) => {
           const newStep: Step = {
@@ -60,6 +59,14 @@ const useFormEditorStore = create<FormEditorState>()(
 
           return { activeStep: newStep, form: { ...state.form, steps: [...state.form.steps, newStep] } };
         });
+      },
+      editStep: (stepId: string, data: Editable) => {
+        set((state) => ({
+          form: {
+            ...state.form,
+            steps: state.form.steps.map((step) => (step.id === stepId ? { ...step, ...data } : step))
+          }
+        }));
       },
       removeStep: (stepId: string) => {
         set((state) => {
