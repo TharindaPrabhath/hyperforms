@@ -19,8 +19,6 @@ function WelcomeRenderer() {
     editStep(activeStep.id, editable);
   };
 
-  console.log(step);
-
   return (
     <div className={`shadow-lg flex flex-col lg:flex-row items-center justify-center gap-20 bg-slate-100 h-full rounded-2xl p-4`}>
       <div className="max-w-xl flex-col items-center justify-center">
@@ -28,9 +26,11 @@ function WelcomeRenderer() {
         <RendererInput variant="p" value={step.description} onChange={(e) => handleOnChange({ description: e.target.value })} />
         <Button className="mt-4 rounded-full">{step.button.text}</Button>
       </div>
-      <div>
-        <Image src={step.image?.url!} alt={step.title} width={500} height={500} />
-      </div>
+      {step.image && (
+        <div>
+          <Image src={step.image?.url!} alt={step.title} width={500} height={500} />
+        </div>
+      )}
     </div>
   );
 }

@@ -75,9 +75,9 @@ function StepConfig({ open, onSubmit, onClose }: SheetProps) {
     editStep(activeStep.id, editable);
   };
 
-  if (activeStep?.type === 'welcome') return <WelcomeStepConfig open={open} onSubmit={() => {}} onClose={onClose} />;
+  if (activeStep?.type === 'welcome') return <WelcomeStepConfig open={open} onSubmit={onClose} onClose={onClose} />;
 
-  if (activeStep?.type === 'end') return <EndStepConfig open={open} onSubmit={() => {}} onClose={onClose} />;
+  if (activeStep?.type === 'end') return <EndStepConfig open={open} onSubmit={onClose} onClose={onClose} />;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

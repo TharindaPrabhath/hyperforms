@@ -16,6 +16,8 @@ import { Input } from '@/components/ui/input';
 
 import { Settings } from 'lucide-react';
 
+import useFormEditorStore from '@/hooks/use-form-editor-store';
+
 type SheetProps = {
   open: boolean;
   onClose: () => void;
@@ -31,10 +33,15 @@ type EditFormProps = z.infer<typeof formSchema>;
 function FormSettings({ open, onSubmit, onClose }: SheetProps) {
   const [loading, setLoading] = useState(false);
 
+  const _form = useFormEditorStore((state) => state.form);
+
   const form = useForm<EditFormProps>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: ''
+      name: 'New Form'
+    },
+    values: {
+      name: _form?.name
     }
   });
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import Image from 'next/image';
 
@@ -44,6 +44,9 @@ type EditStepProps = z.infer<typeof formSchema>;
 
 function WelcomeStepConfig({ open, onSubmit, onClose }: SheetProps) {
   const [loading, setLoading] = useState(false);
+
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const activeStep = useFormEditorStore((state) => state.form.activeStep) as WelcomeStep;
   const _form = useFormEditorStore((state) => state.form);
   const step = _form.steps.find((step) => step.id === activeStep.id) as WelcomeStep;
@@ -72,6 +75,29 @@ function WelcomeStepConfig({ open, onSubmit, onClose }: SheetProps) {
 
   const handleOnChange = (editable: Editable) => {
     editStep(activeStep.id, editable);
+  };
+
+  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) {
+      alert('No file selected');
+      return;
+    }
+
+    const fileType = file.type.split('/')[1];
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      const dataURL = `data:image/${fileType};base64,${btoa(result)}`;
+      editStep(activeStep.id, { image: { url: dataURL, placement: step.image?.placement ?? 'left' } });
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  const handleRemoveImage = () => {
+    editStep(activeStep.id, { image: undefined });
   };
 
   return (
@@ -157,27 +183,30 @@ function WelcomeStepConfig({ open, onSubmit, onClose }: SheetProps) {
               )}
             />
 
-            <Button size="sm" variant="outline">
+            <Button size="sm" variant="outline" type="button" onClick={() => fileRef.current?.click()}>
               <Upload className="w-4 h-4 mr-1" /> Upload
             </Button>
+            <input ref={fileRef} type="file" style={{ display: 'none' }} onChange={handleUploadImage} />
 
-            <div className="space-y-2">
-              <Image src={activeStep.image?.url!} alt="Uploaded image" width={500} height={500} />
-              <div className="flex flex-row items-center justify-between">
-                <Button size="sm" variant="outline" className="">
-                  Remove Image
-                </Button>
+            {step.image?.url && (
+              <div className="space-y-2">
+                <Image src={decodeURIComponent(step.image?.url!)} alt="Uploaded image" width={500} height={500} />
+                <div className="flex flex-row items-center justify-between">
+                  <Button size="sm" variant="outline" onClick={handleRemoveImage}>
+                    Remove Image
+                  </Button>
 
-                <ToggleGroup type="single">
-                  <ToggleGroupItem value="a">
-                    <AlignLeft className="w-4 h-4" />
-                  </ToggleGroupItem>
-                  <ToggleGroupItem value="b">
-                    <AlignRight className="w-4 h-4" />
-                  </ToggleGroupItem>
-                </ToggleGroup>
+                  <ToggleGroup type="single">
+                    <ToggleGroupItem value="a">
+                      <AlignLeft className="w-4 h-4" />
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="b">
+                      <AlignRight className="w-4 h-4" />
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="flex flex-row items-center gap-4">
               <Button type="submit" loading={loading} className="flex-1">

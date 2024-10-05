@@ -11,8 +11,18 @@ import Renderer from './components/renderer';
 
 import { Box, Settings } from 'lucide-react';
 
+import useFormEditorStore from '@/hooks/use-form-editor-store';
+
 function FormBuilder() {
   const [openSettings, setOpenSettings] = useState(false);
+
+  const form = useFormEditorStore((state) => state.form);
+  const changeFormName = useFormEditorStore((state) => state.changeFormName);
+
+  const handleFormSettingsSubmit = (name: string) => {
+    changeFormName(name);
+    setOpenSettings(false);
+  };
 
   return (
     <div className="bg-white p-2 flex flex-row h-screen overflow-y-hidden">
@@ -27,14 +37,14 @@ function FormBuilder() {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink className="text-xs">Test</BreadcrumbLink>
+                <BreadcrumbLink className="text-xs">{form.name}</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
           <Button variant="ghost" type="button" size="sm" onClick={() => setOpenSettings(true)}>
             <Settings className="w-4 h-4" />
           </Button>
-          <FormSettings open={openSettings} onSubmit={() => {}} onClose={() => setOpenSettings(false)} />
+          <FormSettings open={openSettings} onSubmit={(data) => handleFormSettingsSubmit(data.name)} onClose={() => setOpenSettings(false)} />
         </div>
         <Tabs defaultValue="content" className="w-full mt-4 flex-1">
           <TabsList className="w-fit mx-auto">

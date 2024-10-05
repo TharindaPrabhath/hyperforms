@@ -1,5 +1,6 @@
 import Watermark from '@/components/watermark';
 import { RendererInput } from '@/components/ui/renderer-input';
+import { Button } from '@/components/ui/button';
 
 import useFormEditorStore from '@/hooks/use-form-editor-store';
 
@@ -20,6 +21,7 @@ function EndRenderer() {
       <div className="flex-col items-center justify-center">
         <RendererInput variant="h1" value={step.title} onChange={(e) => handleOnChange({ title: e.target.value })} />
         <RendererInput variant="p" value={step.description} onChange={(e) => handleOnChange({ description: e.target.value })} />
+        <Button className="mt-4 rounded-full">Submit</Button>
       </div>
 
       <Watermark />

@@ -8,6 +8,7 @@ import { generateId } from '@/lib/utils';
 type FormEditorState = {
   setActiveStep: (step: Step) => void;
   form: Form;
+  changeFormName: (name: string) => void;
   addStep: (inputType: InputType) => void;
   editStep: (stepId: string, data: Editable) => void;
   removeStep: (stepId: string) => void;
@@ -50,6 +51,7 @@ const useFormEditorStore = create<FormEditorState>()(
     (set) => ({
       setActiveStep: (step: Step) => set((state) => ({ form: { ...state.form, activeStep: step } })),
       form: InitFormState,
+      changeFormName: (name: string) => set((state) => ({ form: { ...state.form, name } })),
       addStep: (inputType: InputType) => {
         set((state) => {
           const newStep: Step = {
