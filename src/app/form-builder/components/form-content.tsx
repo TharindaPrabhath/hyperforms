@@ -1,10 +1,22 @@
+'use client';
+
+import { useState } from 'react';
+
 // Components
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import AddFieldModal, { Field } from './add-field-modal';
 
 import { Menu, Dot, GripVertical, Plus, Cloud, Trash2, X } from 'lucide-react';
 
 function FormContent() {
+  const [openAddFieldModal, setOpenAddFieldModal] = useState(false);
+
+  const handleAddField = (selectedField: Field) => {
+    console.log('selected field', selectedField);
+    setOpenAddFieldModal(false);
+  };
+
   return (
     <div className="flex flex-col justify-between ">
       <div className="flex-1">
@@ -20,9 +32,11 @@ function FormContent() {
           <Tab type="question" label="Welcome screen" onClick={() => {}} />
         </div>
 
-        <Button variant="outline" size="sm" className="mt-6">
+        <Button variant="outline" size="sm" className="mt-6" onClick={() => setOpenAddFieldModal(true)}>
           <Plus className="w-4 h-4 mr-1" /> Add field
         </Button>
+
+        <AddFieldModal open={openAddFieldModal} loading={false} onSubmit={handleAddField} onClose={() => setOpenAddFieldModal(false)} />
 
         <Separator className="my-10" />
 
