@@ -54,6 +54,7 @@ function FormContent() {
   };
 
   const handlePublishForm = () => {
+    setActiveStep(form.steps.find((step) => step.type === 'welcome') ?? form.steps[0]);
     router.push(`/forms/${form.id}`);
   };
 
