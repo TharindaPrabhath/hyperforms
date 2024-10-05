@@ -63,9 +63,9 @@ function EndStepConfig({ open, onSubmit, onClose }: SheetProps) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="left" // Prevents the sheet from closing when clicking outside
-        onInteractOutside={(e) => {
-          e.preventDefault();
-        }}
+        // onInteractOutside={(e) => {
+        //   e.preventDefault();
+        // }}
         className="w-80 border-none outline-none shadow-none"
       >
         <SheetHeader>

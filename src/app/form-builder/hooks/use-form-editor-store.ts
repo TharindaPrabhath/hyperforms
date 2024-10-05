@@ -71,8 +71,9 @@ const useFormEditorStore = create<FormEditorState>()(
       removeStep: (stepId: string) => {
         set((state) => {
           const updatedSteps = state.form.steps.filter((step) => step.id !== stepId);
+          const welcomeStep = updatedSteps.find((step) => step.type === 'welcome');
 
-          return { form: { ...state.form, steps: updatedSteps } };
+          return { form: { ...state.form, activeStep: welcomeStep!, steps: updatedSteps } };
         });
       }
     }),

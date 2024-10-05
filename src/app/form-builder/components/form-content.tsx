@@ -27,6 +27,7 @@ function FormContent() {
   const handleAddField = (selectedField: Field) => {
     // Essentially, what happens here is that adding a new step of type question.
     addStep(selectedField.type);
+    setActiveStep(form.steps[form.steps.length - 1]);
     setOpenStepConfigDrawer(true);
     setOpenAddFieldModal(false);
   };

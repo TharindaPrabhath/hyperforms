@@ -50,9 +50,9 @@ function StepConfig({ open, onSubmit, onClose }: SheetProps) {
       description: ''
     },
     values: {
-      title: step.title,
-      description: step.description,
-      isRequired: step.isRequired
+      title: step?.title,
+      description: step?.description,
+      isRequired: step?.isRequired
     }
   });
 
